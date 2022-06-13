@@ -6,8 +6,19 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+nav {
+  font-size: 24px;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  font-size: 48px;
+  color: red;
+}
+
 a {
-  color: inherit;
+  color: #09f;
   text-decoration: none;
 }
 
