@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
+import { useState } from "react";
 import AppLayout from "../components/AppLayout";
 import Button from "../components/Button";
 import GitHub from "../components/Icons/github";
@@ -7,8 +8,12 @@ import { loginWithGitHub } from "../firebase/client";
 import { colors } from '../styles/theme'
 
 export default function Home() {
+  const [user, setUser] = useState(null);
+
   const handleClick = () => {
     loginWithGitHub().then(user => {
+      const { avatar, url, username } = user;
+      setUser(user);
       console.log(user);
     }).catch(err => {
       console.log(err);

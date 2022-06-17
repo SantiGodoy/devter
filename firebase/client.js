@@ -11,9 +11,20 @@ const firebaseConfig = {
     measurementId: "G-BHS2P297FE"
   };
 
-  firebase.initializeApp(firebaseConfig);
+  !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 
   export const loginWithGitHub = () => {
     const gitHubProvider = new firebase.auth.GithubAuthProvider();
-    return firebase.auth().signInWithPopup(gitHubProvider);
+    return firebase.auth().signInWithPopup(gitHubProvider)
+        .then(user => {
+            const {additionalUserInfo} = user;
+            const {username, profile} = additionalUserInfo;
+            const {avatar_url, blog} = profile;
+
+            return {
+                avatar: avatar_url,
+                url: blog,
+                username
+            }
+        });
   }
