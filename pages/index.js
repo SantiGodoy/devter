@@ -1,9 +1,20 @@
 import Head from "next/head";
 import Image from "next/image";
 import AppLayout from "../components/AppLayout";
+import Button from "../components/Button";
+import GitHub from "../components/Icons/github";
+import { loginWithGitHub } from "../firebase/client";
 import { colors } from '../styles/theme'
 
 export default function Home() {
+  const handleClick = () => {
+    loginWithGitHub().then(user => {
+      console.log(user);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
   return (
     <>
       <Head>
@@ -15,6 +26,13 @@ export default function Home() {
         <section>
           <Image src="/devter-logo.png" alt="Logo" width={120} height={120} />
           <h1 href="https://nextjs.org">devter</h1>
+          <h2>Talk about development<br />with developers 👨‍💻👩‍💻</h2>
+          <div>
+            <Button onClick={handleClick}>
+              <GitHub fill={colors.white} width={24} height={24}/>
+              Login with GitHub
+            </Button>
+          </div>
         </section>
       </AppLayout>
 
