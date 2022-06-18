@@ -1,13 +1,13 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { useEffect, useState } from 'react'
-import AppLayout from '../components/AppLayout'
-import Button from '../components/Button'
-import GitHub from '../components/Icons/github'
-import { loginWithGitHub, onAuthStateChanged } from '../firebase/client'
-import { colors } from '../styles/theme'
+import Head from "next/head"
+import Image from "next/image"
+import { useEffect, useState } from "react"
+import AppLayout from "../components/AppLayout"
+import Button from "../components/Button"
+import GitHub from "../components/Icons/github"
+import { loginWithGitHub, onAuthStateChanged } from "../firebase/client"
+import { colors } from "../styles/theme"
 
-export default function Home () {
+export default function Home() {
   const [user, setUser] = useState(undefined)
 
   useEffect(() => {
