@@ -1,24 +1,26 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppLayout from "../components/AppLayout";
 import Button from "../components/Button";
 import GitHub from "../components/Icons/github";
-import { loginWithGitHub } from "../firebase/client";
-import { colors } from '../styles/theme'
+import { loginWithGitHub, onAuthStateChanged } from "../firebase/client";
+import { colors } from "../styles/theme";
 
 export default function Home() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(undefined);
+
+  useEffect(() => {
+    onAuthStateChanged(setUser);
+  }, []);
 
   const handleClick = () => {
-    loginWithGitHub().then(user => {
-      const { avatar, url, username } = user;
-      setUser(user);
-      console.log(user);
-    }).catch(err => {
-      console.log(err);
-    })
-  }
+    loginWithGitHub()
+      .then(setUser)
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -31,12 +33,29 @@ export default function Home() {
         <section>
           <Image src="/devter-logo.png" alt="Logo" width={120} height={120} />
           <h1 href="https://nextjs.org">devter</h1>
-          <h2>Talk about development<br />with developers 👨‍💻👩‍💻</h2>
+          <h2>
+            Talk about development
+            <br />
+            with developers 👨‍💻👩‍💻
+          </h2>
           <div>
-            <Button onClick={handleClick}>
-              <GitHub fill={colors.white} width={24} height={24}/>
-              Login with GitHub
-            </Button>
+            {user === null && (
+              <Button onClick={handleClick}>
+                <GitHub fill={colors.white} width={24} height={24} />
+                Login with GitHub
+              </Button>
+            )}
+            {user && user.avatar && (
+              <div>
+                <Image
+                  src={user.avatar}
+                  alt="avatar"
+                  width={120}
+                  height={120}
+                />
+                <strong>{user.username}</strong>
+              </div>
+            )}
           </div>
         </section>
       </AppLayout>
