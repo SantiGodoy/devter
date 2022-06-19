@@ -1,6 +1,7 @@
 import firebase from "firebase/compat/app"
 import "firebase/compat/auth"
 import "firebase/compat/firestore"
+import "firebase/compat/storage"
 import { USER_STATES } from "hooks/useUser"
 
 const firebaseConfig = {
@@ -42,7 +43,7 @@ export const loginWithGitHub = () => {
   return firebase.auth().signInWithPopup(gitHubProvider)
 }
 
-export const addDevit = ({ avatar, content, userId, userName }) => {
+export const addDevit = ({ avatar, content, img, userId, userName }) => {
   return db.collection("devits").add({
     avatar,
     content,
@@ -51,26 +52,32 @@ export const addDevit = ({ avatar, content, userId, userName }) => {
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     likesCount: 0,
     sharedCount: 0,
+    img,
   })
 }
 
 export const fetchLatestDevits = () => {
   return db
     .collection("devits")
+    .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
       return docs.map((doc) => {
         const data = doc.data()
         const id = doc.id
         const { createdAt } = data
-        const intl = new Intl.DateTimeFormat("es-ES")
-        const normalizedCreatedAt = intl.format(createdAt.toDate())
 
         return {
           ...data,
           id,
-          createdAt: normalizedCreatedAt,
+          createdAt: +createdAt.toDate(),
         }
       })
     })
+}
+
+export const uploadImage = (file) => {
+  const ref = firebase.storage().ref(`images/${file.name}`)
+  const task = ref.put(file)
+  return task
 }
