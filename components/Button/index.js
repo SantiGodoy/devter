@@ -1,28 +1,33 @@
 import { colors } from "styles/theme"
 
-export default function Button({ children, onClick }) {
+export default function Button({ children, onClick, disabled }) {
   return (
     <>
-      <button onClick={onClick}>{children}</button>
+      <button disabled={disabled} onClick={onClick}>
+        {children}
+      </button>
       <style jsx>{`
         button {
-          border: 0;
-          background: ${colors.black};
-          display: flex;
           align-items: center;
-          color: ${colors.white};
-          font-size: 16px;
+          background: ${colors.black};
           border-radius: 9999px;
+          border: 0;
+          color: ${colors.white};
           cursor: pointer;
+          display: flex;
+          font-size: 16px;
           font-weight: 600;
           padding: 8px 24px;
           transition: opacity 0.3s ease;
+          user-select: none;
         }
-
+        button[disabled] {
+          pointer-events: none;
+          opacity: 0.2;
+        }
         button > :global(svg) {
           margin-right: 8px;
         }
-
         button:hover {
           opacity: 0.7;
         }
